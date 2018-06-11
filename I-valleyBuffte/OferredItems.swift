@@ -16,6 +16,7 @@ class OferredItems: UIViewController {
     var arrOfItemDates:[String] = []
     var arrOfRowsInSection:[Item] = []
     var arrOfRowsInSectionn:[Item] = []
+    var arrItemsToShow:[Item] = []
     
     let fetchRequest: NSFetchRequest<Item> = NSFetchRequest(entityName: "Item")
     let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
@@ -27,12 +28,8 @@ class OferredItems: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         arrOfItems = CoreDataHandler.getData(entitty: "Item") as! [Item]
-        print("asd \(arrOfItems[arrOfItems.count - 1].itemDate )")
         getItemDates()
         ItemsTable.reloadData()
-        print("date is \(arrOfItemDates[0])")
-        print("date is \(arrOfItemDates[1])")
-        print("date is \(arrOfItemDates[3])")
         //print(arrOfItemDates[0])
         
         
@@ -47,7 +44,7 @@ class OferredItems: UIViewController {
             arrOfItemDates.append(arrOfItems[0].itemDate ?? "")
             
         }
-        else
+        else if  arrOfItems.count > 1
         {
             arrOfItemDates.append(arrOfItems[0].itemDate ?? "")
             for index in 0 ..< arrOfItems.count - 1
@@ -107,19 +104,25 @@ extension OferredItems: UITableViewDataSource,UITableViewDelegate
         return 1
     }
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        for index in 0 ... arrOfItemDates.count - 1
+        if arrOfItemDates.count > 0
         {
-            let predicate = NSPredicate(format: "itemDate == %@", arrOfItemDates[section])
-            fetchRequest.predicate = predicate
-            do {
-                arrOfRowsInSectionn = try context.fetch(self.fetchRequest)
-                return arrOfRowsInSectionn[index].itemDate
-                print("sucess")
-            } catch {
-                print("No rows found")
+            for index in 0 ... arrOfItemDates.count - 1
+            {
+                let predicate = NSPredicate(format: "itemDate == %@", arrOfItemDates[section])
+                fetchRequest.predicate = predicate
+                do {
+                    arrOfRowsInSectionn = try context.fetch(self.fetchRequest)
+                    if arrOfRowsInSectionn.count > 0
+                    {
+                        return arrOfRowsInSectionn[index].itemDate
+                    }
+                    print("sucess")
+                } catch {
+                    print("No rows found")
+                }
             }
         }
-        return "No title"
+        return ""
     }
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
@@ -142,8 +145,9 @@ extension OferredItems: UITableViewDataSource,UITableViewDelegate
     }
     func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
         let deleteAction = UITableViewRowAction(style: .destructive, title: "DELETE") { (rowAction, indexPath) in
-            if indexPath.section >= 0 && indexPath.row >= 0
+            if indexPath.section >= 0
             {
+                self.getRowsInSection(indexPath: indexPath)
                 CoreDataHandler.remove(indexPath:indexPath,array:self.arrOfRowsInSection)
                 tableView.deleteRows(at: [indexPath], with: .automatic)
                 self.getRowsInSection(indexPath: indexPath)
@@ -153,6 +157,32 @@ extension OferredItems: UITableViewDataSource,UITableViewDelegate
         deleteAction.backgroundColor = #colorLiteral(red: 1, green: 0.1491314173, blue: 0, alpha: 1)
         return [deleteAction]
     }
-    
+    // to select cell from table view
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        print("You selected cell number: \(indexPath.row)!")
+        let alert = UIAlertController(title: "Enter the amont ", message: "it must be a number", preferredStyle: .alert)
+        
+        alert.addTextField { (textField) in
+            textField.placeholder = "Enter Count"
+        }
+        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: { [weak alert] (_) in
+            self.arrItemsToShow = CoreDataHandler.getData(entitty: "Item") as! [Item]
+            let orderCount = Int32((alert?.textFields![0].text)!) ?? 1
+            let orderPrice = self.arrItemsToShow[indexPath.row].price
+            let orderName = self.arrItemsToShow[indexPath.row].name
+            let orderId = self.arrItemsToShow[indexPath.row].itemId
+            let orderDate = self.arrItemsToShow[indexPath.row].itemDate
+            let orderTotalCost = orderCount * orderPrice
+            
+            
+            
+            
+            
+            
+            
+        }))
+        
+        self.present(alert, animated: true, completion: nil)
+    }
     
 }
