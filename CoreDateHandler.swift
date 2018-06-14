@@ -32,6 +32,7 @@ class CoreDataHandler: NSObject
             mangedObj.setValue(paremeters["telephoneNumber"], forKey:"telephoneNumber")
             mangedObj.setValue(paremeters["userId"], forKey:"userId")
             mangedObj.setValue(paremeters["username"], forKey:"username")
+            mangedObj.setValue(paremeters["img"], forKey:"img")
         }
         else if (entityName == "Item")
         {
@@ -44,14 +45,14 @@ class CoreDataHandler: NSObject
         else if (entityName == "Order")
         {
             mangedObj.setValue(paremeters["count"], forKey:"count")
-            mangedObj.setValue(paremeters["itemId"], forKey:"itemId")
+            mangedObj.setValue(paremeters["orderId"], forKey:"orderId")
+            mangedObj.setValue(paremeters["userId"], forKey:"userId")
             mangedObj.setValue(paremeters["name"] , forKey:"name")
-            mangedObj.setValue(paremeters["payed"] , forKey:"payed")
-            mangedObj.setValue(paremeters["placed"], forKey:"placed")
-            mangedObj.setValue(paremeters["price"] , forKey:"price")
+            mangedObj.setValue(paremeters["status"], forKey:"status")
+            mangedObj.setValue(paremeters["orderPrice"] , forKey:"orderPrice")
             mangedObj.setValue(paremeters["totalCost"] , forKey:"totalCost")
+            mangedObj.setValue(paremeters["date"] , forKey:"date")
         }
-        
         do {
             try context.save()
             return true

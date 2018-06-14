@@ -16,7 +16,21 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
-        // Override point for customization after application launch.
+        
+        let urls = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
+        print(urls[urls.count - 1] as URL)
+        
+        let mainStory = UIStoryboard(name: "Main", bundle: nil)
+        if let id = UserDefaults.standard.object(forKey: "id")
+        {
+            let profilePadge = mainStory.instantiateViewController(withIdentifier: "UserProfile") as! UserProfile
+            self.window?.rootViewController = profilePadge
+        }
+        else
+        {
+            let SignInVC = mainStory.instantiateViewController(withIdentifier: "SignInVC") as! SignInVC
+            self.window?.rootViewController = SignInVC
+        }
         return true
     }
 

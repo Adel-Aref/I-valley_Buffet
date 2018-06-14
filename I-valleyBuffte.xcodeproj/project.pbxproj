@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		D66256D520CF1AE200589CB3 /* UserProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = D66256D420CF1AE200589CB3 /* UserProfile.swift */; };
+		D66256D720CF567B00589CB3 /* ProfileCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D66256D620CF567B00589CB3 /* ProfileCell.swift */; };
 		D6E647AC20C51EA500200E81 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6E647AB20C51EA500200E81 /* AppDelegate.swift */; };
 		D6E647B120C51EA500200E81 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D6E647AF20C51EA500200E81 /* Main.storyboard */; };
 		D6E647B420C51EA500200E81 /* I_valleyBuffte.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = D6E647B220C51EA500200E81 /* I_valleyBuffte.xcdatamodeld */; };
@@ -22,6 +24,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		D66256D420CF1AE200589CB3 /* UserProfile.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserProfile.swift; sourceTree = "<group>"; };
+		D66256D620CF567B00589CB3 /* ProfileCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ProfileCell.swift; path = "I-valleyBuffte/ProfileCell.swift"; sourceTree = "<group>"; };
 		D6E647A820C51EA500200E81 /* I-valleyBuffte.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "I-valleyBuffte.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		D6E647AB20C51EA500200E81 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		D6E647B020C51EA500200E81 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -86,6 +90,7 @@
 				D6E647CC20C5562000200E81 /* AddItem.swift */,
 				D6E647CE20C5563E00200E81 /* OferredItems.swift */,
 				D6E647C820C52C9400200E81 /* SignUpVC.swift */,
+				D66256D420CF1AE200589CB3 /* UserProfile.swift */,
 			);
 			name = Controllers;
 			path = "I-valleyBuffte";
@@ -115,6 +120,7 @@
 			isa = PBXGroup;
 			children = (
 				D6E647D020C5577100200E81 /* ItemCell.swift */,
+				D66256D620CF567B00589CB3 /* ProfileCell.swift */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -201,6 +207,8 @@
 			files = (
 				D6E647AC20C51EA500200E81 /* AppDelegate.swift in Sources */,
 				D6E647C720C5248C00200E81 /* CoreDateHandler.swift in Sources */,
+				D66256D520CF1AE200589CB3 /* UserProfile.swift in Sources */,
+				D66256D720CF567B00589CB3 /* ProfileCell.swift in Sources */,
 				D6E647D120C5577100200E81 /* ItemCell.swift in Sources */,
 				D6E647B420C51EA500200E81 /* I_valleyBuffte.xcdatamodeld in Sources */,
 				D6E647C920C52C9400200E81 /* SignUpVC.swift in Sources */,

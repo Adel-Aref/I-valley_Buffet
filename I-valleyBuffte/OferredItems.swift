@@ -17,6 +17,8 @@ class OferredItems: UIViewController {
     var arrOfRowsInSection:[Item] = []
     var arrOfRowsInSectionn:[Item] = []
     var arrItemsToShow:[Item] = []
+    var arrORder:[Order] = []
+    var arrStatus:[String] = ["Placed","Processed","Payed"]
     
     let fetchRequest: NSFetchRequest<Item> = NSFetchRequest(entityName: "Item")
     let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
@@ -72,7 +74,15 @@ class OferredItems: UIViewController {
                 print("No rows found")
             }
         }
-        
+    }
+    // make a func the return the current date
+    func getCurrentDate()-> String
+    {
+        let date = Date()
+        let formatter = DateFormatter()
+        formatter.dateFormat = "dd/MM/yyyy"
+        let result = formatter.string(from: date)
+        return result
     }
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
@@ -91,7 +101,7 @@ extension OferredItems: UITableViewDataSource,UITableViewDelegate
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         for index in 0 ... arrOfItemDates.count - 1
         {
-            let predicate = NSPredicate(format: "itemDate == %@", arrOfItemDates[section] )
+            let predicate = NSPredicate(format: "itemDate == %@", arrOfItemDates[section])
             fetchRequest.predicate = predicate
             do {
                 arrOfRowsInSection = try context.fetch(self.fetchRequest)
@@ -166,21 +176,54 @@ extension OferredItems: UITableViewDataSource,UITableViewDelegate
             textField.placeholder = "Enter Count"
         }
         alert.addAction(UIAlertAction(title: "OK", style: .default, handler: { [weak alert] (_) in
-            self.arrItemsToShow = CoreDataHandler.getData(entitty: "Item") as! [Item]
-            let orderCount = Int32((alert?.textFields![0].text)!) ?? 1
-            let orderPrice = self.arrItemsToShow[indexPath.row].price
-            let orderName = self.arrItemsToShow[indexPath.row].name
-            let orderId = self.arrItemsToShow[indexPath.row].itemId
-            let orderDate = self.arrItemsToShow[indexPath.row].itemDate
-            let orderTotalCost = orderCount * orderPrice
             
+            let def = UserDefaults.standard
+            let userId = def.object(forKey: "id")
+            self.getRowsInSection(indexPath: indexPath)
+            if indexPath.section >= 0 && indexPath.row >= 0
+            {
+                let orderCount = Int32((alert?.textFields![0].text) ?? "5" ) ?? 5
+                let orderPrice = self.arrOfRowsInSection[indexPath.row].price
+                let orderName = self.arrOfRowsInSection[indexPath.row].name
+                let orderId = self.arrOfRowsInSection[indexPath.row].itemId
+                let availble = self.arrOfRowsInSection[indexPath.row].availbe
+                let orderDate = self.getCurrentDate()
+                let orderTotalCost = orderCount * orderPrice
+                
+                
+                let paremters = ["count":orderCount ,
+                                 "orderId":orderId ,
+                                 "name":orderName ,
+                                 "status":self.arrStatus[0] ,
+                                 "totalCost":orderTotalCost,
+                                 "userId":userId ,
+                                 "orderPrice":orderPrice ,
+                                 "date":orderDate
+                    ] as [String : Any]
             
-            
-            
-            
-            
-            
-        }))
+            if availble == true
+            {
+                print("asd \(CoreDataHandler.saveData(paremeters: paremters, entityName: "Order"))")
+                guard let UserProfile = self.storyboard?.instantiateViewController(withIdentifier: "UserProfile") as? UserProfile else {return}
+                self.presentDtails(viewControllerToPresent: UserProfile)
+                
+                self.arrORder = CoreDataHandler.getData(entitty: "Order") as! [Order]
+                
+                print("name is \(self.arrORder[self.arrORder.count - 1].userId) and id item id is \(self.arrORder[self.arrORder.count - 1].orderPrice)    dddddd \(self.arrORder[self.arrORder.count - 1].totalCost)")
+            }
+                self.getRowsInSection(indexPath: indexPath)
+        }
+            else
+            {
+                let alert = UIAlertController(title: "the Item isn't avilable Now ! ", message: "later will be avilable ", preferredStyle: .alert)
+                
+                alert.addAction(UIAlertAction(title: "OK", style: .default, handler: { [weak alert] (_) in
+                    
+                }))
+                
+                self.present(alert, animated: true, completion: nil)// End of the second alert
+            }
+        })) // End of the first alert
         
         self.present(alert, animated: true, completion: nil)
     }
